@@ -26,6 +26,8 @@ namespace BMS.WEBUI
 			builder.Services.AddScoped(typeof(IBookService), typeof(BookService));
 			builder.Services.AddScoped(typeof(IAuthorService), typeof(AuthorService));
 			builder.Services.AddScoped(typeof(IAuthorContactService), typeof(AuthorContactService));
+			builder.Services.AddScoped(typeof(IPublisherService), typeof(PublisherService));
+			builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
 			builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 			var app = builder.Build();
 

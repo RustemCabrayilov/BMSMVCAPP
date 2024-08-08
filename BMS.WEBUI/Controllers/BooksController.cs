@@ -1,4 +1,5 @@
-﻿using BMS.DAL.Data;
+﻿using AutoMapper;
+using BMS.DAL.Data;
 using BMS.DAL.Dtos;
 using BMS.DAL.Models;
 using BMS.DAL.Repository;
@@ -17,11 +18,13 @@ namespace BMS.WEBUI.Controllers
         private readonly IGenericService<Author> _authorsService;
         private readonly IGenericService<Publisher> _publisherService;
         private readonly IGenericService<BookCategory> _bookCategoryService;
+        private readonly IMapper _mapper;
         public BooksController(IBookService bookService,
             IGenericService<Category> categoryService,
             IGenericService<Author> authorsService,
             IGenericService<Publisher> publisherService,
-            IGenericService<BookCategory> bookCategoryService
+            IGenericService<BookCategory> bookCategoryService,
+            IMapper mapper
             )
         {
             _bookService = bookService;
@@ -29,12 +32,13 @@ namespace BMS.WEBUI.Controllers
             _authorsService = authorsService;
             _publisherService = publisherService;
             _bookCategoryService = bookCategoryService;
+            _mapper = mapper;
         }
         public async Task<IActionResult> Index()
         {
             List<BookViewModel> list = new List<BookViewModel>();
 
-            var books = await _bookService.GetAll();
+            var books = await _bookService.GetAll("Publisher", "Author", "BookCategories.Category");
             var model = books.Select(x => new BookViewModel
             {
                 Id = x.Id,
@@ -47,16 +51,16 @@ namespace BMS.WEBUI.Controllers
             {
                 ViewBag.HasData = true;
 
-            /*    foreach (var item in books)
-                {
-                    *//* var publisherName = _publisherService.Get(item.PublisherId).Result.Name;*/
-                    /*  List<string> categoryList = new List<string>();*//*
+                /*    foreach (var item in books)
+                    {
+                        *//* var publisherName = _publisherService.Get(item.PublisherId).Result.Name;*/
+                /*  List<string> categoryList = new List<string>();*//*
 
-                    
-                    var author = _authorsService.Get(item.AuthorId).Result;
-                   
-                }*/
-               
+
+                var author = _authorsService.Get(item.AuthorId).Result;
+
+            }*/
+
             }
             else
             {
@@ -83,6 +87,45 @@ namespace BMS.WEBUI.Controllers
             await _bookService.Add(dto);
             return RedirectToAction("Index");
 
+        }
+        public async Task<IActionResult> Edit(int id)
+        {
+            var book = await _bookService.Get(id);
+            BookDto dto = _mapper.Map<BookDto>(book);
+            var categories = await _categoryService.GetAll();
+            var authors = await _authorsService.GetAll();
+            var publishers = await _publisherService.GetAll();
+            ViewBag.Categories = categories;
+            ViewBag.Authors = authors;
+            ViewBag.Publishers = publishers;
+
+            return View(dto);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(BookDto dto, int id)
+        {
+
+            await _bookService.Update(dto, id);
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var book = await _bookService.Get(id, "Publisher", "Author", "BookCategories.Category");
+            BookViewModel bookVM = new BookViewModel
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Categories = book.BookCategories.Select(y => new Category { Name = y.Category.Name }).ToList(),
+                AuthorFullName = book.Author.Name + " " + book.Author.Surname,
+                PublisherName = book.Publisher.Name,
+            };
+            return View(bookVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(BookViewModel viewModel)
+        {
+            _bookService.Delete(viewModel.Id);
+           return RedirectToAction("Index");
         }
     }
 }

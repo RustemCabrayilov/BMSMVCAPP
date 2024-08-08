@@ -1,6 +1,8 @@
-﻿using BMS.DAL.Data;
+﻿using Azure;
+using BMS.DAL.Data;
 using BMS.DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,10 +37,18 @@ namespace BMS.DAL.Repository
             return entity;
         }
 
-        public async Task<T> Get(int id)
+        public async Task<T> Get(int id,params string[] includes)
         {
-            var entity = await _dbSet.FindAsync(id);
-            return entity;
+            var query =  _dbSet.Where(x=>x.Id==id).AsQueryable();
+           
+            if (includes is not null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+            return await query.FirstOrDefaultAsync(x=>x.Id==id);
         }
 
         public async Task<IQueryable<T>> GetAll(params string[] includes)
@@ -51,7 +61,7 @@ namespace BMS.DAL.Repository
 					query = query.Include(include);
 				}
 			}
-			return  _dbSet;
+			return  query;
 
         }
 

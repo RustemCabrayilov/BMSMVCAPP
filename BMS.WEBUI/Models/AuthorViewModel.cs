@@ -5,8 +5,12 @@ namespace BMS.WEBUI.Models
 	public class AuthorViewModel
 	{
         public int Id { get; set; }
-        public string FullName { get; set; }
-        public string ContactNumber { get; set; }
-        public string Address { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public List<Book>? Books { get; set; }
+        public AuthorViewModel()
+        {
+            Books = new List<Book>();
+        }
     }
 }

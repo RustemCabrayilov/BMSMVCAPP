@@ -13,7 +13,7 @@ namespace BMS.DAL.Services.Interfaces
 		public T Update(T entity);
 		public T Delete(int id);
 		public Task<T> Get(int id);
-		public Task<List<T>> GetAll();
+		public Task<List<T>> GetAll(params string[] includes);
 		
 	}
 }

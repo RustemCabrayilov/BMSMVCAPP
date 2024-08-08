@@ -12,8 +12,8 @@ namespace BMS.DAL.Services.Interfaces
     {
         public Task<AuthorContactDto> Add(AuthorContactDto dto);
         public Task<List<AuthorContact>> GetAll(params string[] includes);
-		public Task<AuthorContact> Get(int id);
+		public Task<AuthorContact> Get(int id, params string[] includes);
         public AuthorContact Delete(int id);
-        public Task<AuthorContact> Edit(AuthorContactDto dto,int id);
+        public Task<AuthorContact> Update(AuthorContactDto dto,int id);
 	}
 }

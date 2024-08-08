@@ -30,12 +30,26 @@ namespace BMS.DAL.Services.Implementations
 			return dto;
 		}
 
-		public async Task<List<Author>> GetAll(params string[] includes)
+		public async Task<IQueryable<Author>> GetAll(params string[] includes)
 		{
-			return  _authorRepository.GetAll().Result.ToList();
+			return await _authorRepository.GetAll(includes);
 		}public async Task<Author> Get(int id)
 		{
 			return await _authorRepository.Get(id);
+		}
+
+		public async Task<Author> Update(AuthorDto dto, int id)
+		{
+			var author = await Get(id);
+			author.Name = dto.Name;
+			author.Surname = dto.Surname;
+			return  _authorRepository.Update(author);
+		}
+
+		public  Author Delete(int id)
+		{
+			
+			return  _authorRepository.Delete(id); ;
 		}
 	}
 }

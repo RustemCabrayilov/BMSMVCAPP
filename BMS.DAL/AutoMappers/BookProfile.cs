@@ -14,9 +14,12 @@ namespace BMS.DAL.AutoMappers
 		public BookProfile()
 		{
 			CreateMap<BookDto, Book>();
+			CreateMap<Book, BookDto>();
 			CreateMap<AuthorDto, Author>();
+			CreateMap<Author, AuthorDto>();
+			CreateMap<PublisherDto, Publisher>();
 			CreateMap<AuthorContactDto, AuthorContact>();
-			CreateMap<AuthorContact,AuthorContactDto>();
+			CreateMap<AuthorContact, AuthorContactDto>();
 
 		}
 	}

@@ -36,16 +36,16 @@ namespace BMS.DAL.Services.Implementations
 
 			return authors.ToList();
 		}
-		public async Task<AuthorContact> Get(int id)
+		public async Task<AuthorContact> Get(int id,params string[] includes)
 		{
-			return await _authorContactRepository.Get(id);
+			return await _authorContactRepository.Get(id,includes);
 
 		}public AuthorContact  Delete(int id)
 		{
 			return  _authorContactRepository.Delete(id);
 		}
 
-        public  async Task<AuthorContact> Edit(AuthorContactDto dto,int id)
+        public  async Task<AuthorContact> Update(AuthorContactDto dto,int id)
         {
 
 			var authorContact = await Get(id);

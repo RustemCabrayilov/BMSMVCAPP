@@ -23,15 +23,15 @@ namespace BMS.WEBUI.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var authorContacts = await _authorContactService.GetAll();
-			List<AuthorViewModel> list = new List<AuthorViewModel>();
+			List<AuthorContactViewModel> list = new List<AuthorContactViewModel>();
 			if (authorContacts.Any())
 			{
 				ViewBag.HasData = true;
 				foreach (var item in authorContacts)
 				{
 					var author = await _authorService.Get(item.AuthorId);
-					list.Add(new AuthorViewModel
-					{
+					list.Add(new AuthorContactViewModel
+                    {
 						Id = item.Id,
 						FullName = author.Name + " " + author.Surname,
 						Address = item.Address,
@@ -59,19 +59,7 @@ namespace BMS.WEBUI.Controllers
 			await _authorContactService.Add(dto);
 			return RedirectToAction("Index");
 		}
-		public async Task<IActionResult> Delete(int id)
-		{
-			var authorContact = await _authorContactService.Get(id);
-			return View(authorContact);
-		}
-		[HttpPost]
-		public  IActionResult DeletePost(int id)
-		{
-			
-			var authorContact=  _authorContactService.Delete(id);
-
-			return RedirectToAction("Index");
-		}
+	
         public async Task<IActionResult> Edit(int id)
         {
             ViewBag.Authors = await _authorService.GetAll();
@@ -82,10 +70,27 @@ namespace BMS.WEBUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(AuthorContactDto dto,int id)
         {
-		
-           
+           await _authorContactService.Update(dto,id);
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var authorContact = await _authorContactService.Get(id,"Author");
+            AuthorContactViewModel authorVM = new AuthorContactViewModel
+            {
+                Id = authorContact.Id,
+                FullName = authorContact.Author.Name + " " + authorContact.Author.Surname,
+                ContactNumber = authorContact.ContactNumber,
+				Address = authorContact.Address,
+            };
+            return View(authorVM);
+        }
+        [HttpPost]
+        public IActionResult DeletePost(int id)
+        {
 
-           await _authorContactService.Edit(dto,id);
+            var authorContact = _authorContactService.Delete(id);
+
             return RedirectToAction("Index");
         }
     }

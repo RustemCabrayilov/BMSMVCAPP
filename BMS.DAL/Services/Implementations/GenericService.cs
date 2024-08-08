@@ -35,9 +35,9 @@ namespace BMS.DAL.Services.Implementations
 			return entity;
 		}
 
-		public async Task<List<T>> GetAll()
+		public async Task<List<T>> GetAll(params string[] includes)
 		{
-			return  _genericRepository.GetAll().Result.ToList();
+			return  _genericRepository.GetAll(includes).Result.ToList();
 		}
 
 		public T Update(T entity)
