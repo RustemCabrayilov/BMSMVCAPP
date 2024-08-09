@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace BMS.DAL.AutoMappers
 {
-	public class BookProfile : Profile
+	public class MappingProfile : Profile
 	{
-		public BookProfile()
+		public MappingProfile()
 		{
 			CreateMap<BookDto, Book>();
 			CreateMap<Book, BookDto>();
@@ -20,6 +20,8 @@ namespace BMS.DAL.AutoMappers
 			CreateMap<PublisherDto, Publisher>();
 			CreateMap<AuthorContactDto, AuthorContact>();
 			CreateMap<AuthorContact, AuthorContactDto>();
+			CreateMap<CategoryDto, Category>();
+			CreateMap<Category, CategoryDto>();
 
 		}
 	}

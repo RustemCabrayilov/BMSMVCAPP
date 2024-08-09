@@ -29,7 +29,7 @@ namespace BMS.DAL.Repository
             return entity;
         }
 
-        public  T Delete(int id)
+        public T Delete(int id)
         {
             var entity =  _dbSet.Find(id);
             _dbSet.Remove(entity);

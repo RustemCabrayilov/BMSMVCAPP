@@ -3,8 +3,8 @@ using BMS.DAL.Data;
 using BMS.DAL.Repository;
 using BMS.DAL.Services.Implementations;
 using BMS.DAL.Services.Interfaces;
+using BMS.WEBUI.ServiceRegistrations;
 using Microsoft.EntityFrameworkCore;
-
 namespace BMS.WEBUI
 {
 	public class Program
@@ -14,21 +14,10 @@ namespace BMS.WEBUI
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
-			builder.Services.AddAutoMapper(typeof(BookProfile));
-			builder.Services.AddControllersWithViews();
-			builder.Services.AddDbContext<BMSDbContext>(opts =>
-			{
-				opts.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnectionString"));
 
-			});
-			builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-			builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
-			builder.Services.AddScoped(typeof(IBookService), typeof(BookService));
-			builder.Services.AddScoped(typeof(IAuthorService), typeof(AuthorService));
-			builder.Services.AddScoped(typeof(IAuthorContactService), typeof(AuthorContactService));
-			builder.Services.AddScoped(typeof(IPublisherService), typeof(PublisherService));
-			builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+			builder.Services.AddControllersWithViews();
 			builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+			builder.Services.Register(builder.Configuration);
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.

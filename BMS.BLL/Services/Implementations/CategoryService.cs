@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BMS.DAL.Services.Implementations
+namespace BMS.BLL.Services.Implementations
 {
 	public class CategoryService : ICategoryService
 	{

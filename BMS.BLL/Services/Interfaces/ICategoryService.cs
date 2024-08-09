@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BMS.DAL.Services.Interfaces
+namespace BMS.BLL.Services.Interfaces
 {
 	public interface ICategoryService
 	{
